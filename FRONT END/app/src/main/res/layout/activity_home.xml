@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.HomeActivity">
+
+
+    <LinearLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:padding="20dp">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_back" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingLeft="32dp"
+            android:text="User Profile"
+            android:textSize="20sp"
+            android:textStyle="bold"
+
+            />
+
+        <TextView
+            android:id="@+id/txtLogOut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Log out"
+            android:textColor="@color/pink"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="350dp"
+        android:layout_height="1dp"
+        android:layout_gravity="center"
+        android:background="@color/pink" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/avatar"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/avatar" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/avatar"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="10dp"
+            android:text="UserName"
+            android:textColor="@color/pink"
+            android:textSize="22sp" />
+
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="350dp"
+        android:layout_height="1dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:background="@color/pink" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="35dp"
+        android:paddingLeft="25dp">
+
+        <ImageView
+            android:id="@+id/imgPerson"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_person" />
+
+        <TextView
+            android:id="@+id/txtName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@+id/imgPerson"
+            android:text="Name"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtNameH"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="28dp"
+            android:layout_toRightOf="@+id/txtName"
+            android:text="UserName"
+            android:textColor="@color/gray"
+            android:textSize="20dp" />
+
+        <EditText
+            android:id="@+id/editName"
+            android:layout_width="150dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="25dp"
+            android:layout_toRightOf="@+id/txtName"
+            android:ems="10"
+            android:hint="Name"
+            android:inputType="text"
+            android:textSize="20dp"
+            android:visibility="gone"
+            />
+
+        <ImageView
+            android:id="@+id/iconEditName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="200dp"
+            android:layout_toRightOf="@+id/txtName"
+            android:src="@drawable/ic_edit_black"
+            android:visibility="gone"/>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="370dp"
+        android:layout_height="1dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="25dp"
+        android:background="@color/gray" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="35dp"
+        android:paddingLeft="25dp">
+
+        <ImageView
+            android:id="@+id/imgEmail"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_email" />
+
+        <TextView
+            android:id="@+id/txtEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@+id/imgEmail"
+            android:text="Email"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtEmailH"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="28dp"
+            android:layout_toRightOf="@+id/txtEmail"
+            android:text="name@gmail.com"
+            android:textColor="@color/gray"
+            android:textSize="20dp"
+            />
+
+        <EditText
+            android:id="@+id/editEmail"
+            android:layout_width="220dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="25dp"
+            android:layout_toRightOf="@+id/txtEmail"
+            android:ems="10"
+            android:hint="email@gmail.com"
+            android:inputType="text"
+            android:textSize="20dp"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/iconEditEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="200dp"
+            android:layout_toRightOf="@+id/txtEmail"
+            android:src="@drawable/ic_edit_black"
+            android:visibility="gone"/>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="370dp"
+        android:layout_height="1dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="25dp"
+        android:background="@color/gray" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+       >
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/editProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/white"
+            android:drawableLeft="@drawable/ic_edit"
+            android:text="Edit Profile"
+            android:textColor="@color/pink"
+            android:textSize="20dp"
+            app:cornerRadius="20dp"
+            app:strokeColor="@color/pink"
+            app:strokeWidth="1dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/editSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="75dp"
+            android:width="90dp"
+            android:backgroundTint="@color/black"
+            android:text="SAVE"
+            android:textColor="@color/white"
+            app:strokeColor="@color/pink"
+            app:strokeWidth="1dp"
+            android:visibility="gone"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/editCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="225dp"
+            android:width="120dp"
+            android:backgroundTint="@color/black"
+            android:text="CANCEL"
+            android:textColor="@color/pink"
+            app:strokeColor="@color/pink"
+            app:strokeWidth="1dp"
+            android:visibility="gone"/>
+
+    </RelativeLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="25dp"
+        android:backgroundTint="@color/white"
+        android:drawableLeft="@drawable/ic_lock"
+        android:text="Change Password"
+        android:textColor="@color/pink"
+        android:textSize="20dp"
+        app:cornerRadius="20dp"
+        app:strokeColor="@color/pink"
+        app:strokeWidth="1dp"
+        android:id="@+id/editPassword"/>
+
+
+</LinearLayout>
