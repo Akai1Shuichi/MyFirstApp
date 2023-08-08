@@ -28,6 +28,11 @@ public interface ApiInterface {
     Call<Token> loginUser(@Field("email") String email,
                          @Field("password") String password);
 
+    @FormUrlEncoded
+    @POST("/user/checkpass")
+    Call<Message> checkPass(@Header("Authorization") String authToken,
+                            @Field("password") String password);
+
     @GET("/user/you")
     Call<User> getUser(@Header("Authorization") String authToken);
 
@@ -35,6 +40,8 @@ public interface ApiInterface {
     @PATCH("/user/you")
     Call<Message> updateUser(@Header("Authorization") String authToken,
                              @Body User user);
+
+
 
     @POST("/user/logout")
     Call<Message> logoutUser(@Header("Authorization") String authToken);

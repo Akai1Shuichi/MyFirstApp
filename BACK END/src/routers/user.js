@@ -12,13 +12,14 @@ router.post('/user/login', userController.login);
 // Logout user
 router.post('/user/logout', auth, userController.logout);
 
+// Check password
+router.post('/user/checkpass', auth, userController.checkpass);
+
 // Get User by ID
 router.get('/user/you', auth, userController.get);
 
 // Update user
 router.patch('/user/you', auth, userController.update);
-
-// Update password user
 
 // Delete user
 router.delete('/user/you', auth, userController.delete);

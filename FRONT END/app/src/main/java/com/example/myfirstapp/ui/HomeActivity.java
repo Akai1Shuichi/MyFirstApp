@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,8 +33,10 @@ public class HomeActivity extends AppCompatActivity {
 
     private ImageView iconEditName,iconEditEmail;
 
+    private String editNametxt , editEmailtxt ,txtnameHt , txtemailHt;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
@@ -50,9 +53,10 @@ public class HomeActivity extends AppCompatActivity {
         iconEditEmail = findViewById(R.id.iconEditEmail);
 
 
-        String txtnameHt = getIntent().getStringExtra("name");
-        String txtemailHt = getIntent().getStringExtra("email");
+        txtnameHt = getIntent().getStringExtra("name");
+        txtemailHt = getIntent().getStringExtra("email");
         authToken = getIntent().getStringExtra("token");
+
         txtNameH.setText(txtnameHt);
         txtEmailH.setText(txtemailHt);
 
@@ -60,14 +64,13 @@ public class HomeActivity extends AppCompatActivity {
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 iconEditName.setVisibility(view.VISIBLE);
                 iconEditEmail.setVisibility(view.VISIBLE);
                 editSave.setVisibility(view.VISIBLE);
                 editCancel.setVisibility(view.VISIBLE);
 
                 editProfile.setVisibility(view.GONE);
-
-
 
                 iconEditName.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -101,8 +104,8 @@ public class HomeActivity extends AppCompatActivity {
                         initialClick();
 
                      if(!(txtNameH.getText().equals(txtnameHt) && txtEmailH.getText().equals(txtemailHt))){
-                         String editNametxt = editName.getText().toString() ;
-                         String editEmailtxt =  editEmail.getText().toString();
+                         editNametxt = editName.getText().toString() ;
+                         editEmailtxt =  editEmail.getText().toString();
 
                          if(editNametxt.equals("") && editEmailtxt.equals("") || editNametxt.equals(txtnameHt) && editEmailtxt.equals(txtemailHt)
                          || editNametxt.equals(txtnameHt) && editEmailtxt.equals("") || editNametxt.equals("") && editEmailtxt.equals(txtemailHt)) {
@@ -112,7 +115,8 @@ public class HomeActivity extends AppCompatActivity {
                          else {
                              txtNameH.setText(editNametxt.equals("") ? txtnameHt : editNametxt);
                              txtEmailH.setText(editEmailtxt.equals("") ? txtemailHt : editEmailtxt);
-
+                             txtnameHt = txtNameH.getText().toString() ;
+                             txtemailHt = txtEmailH.getText().toString() ;
                              updateUser(authToken,editNametxt,editEmailtxt);
                          }
 
@@ -124,11 +128,9 @@ public class HomeActivity extends AppCompatActivity {
                 editCancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        initialClick();
-
                         txtNameH.setText(txtnameHt);
                         txtEmailH.setText(txtemailHt);
-
+                        initialClick();
                     }
                 });
             }
@@ -139,7 +141,8 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(HomeActivity.this,ChangePassword.class);
-                intent.putExtra("token",authToken);
+                intent.putExtra("authToken",authToken);
+//                startActivityForResult(intent,1);
                 startActivity(intent);
                 CustomIntent.customType(HomeActivity.this,"left-to-right");
             }
@@ -185,13 +188,20 @@ public class HomeActivity extends AppCompatActivity {
     private void updateUser(String authToken,String name,String email ) {
         if(name.equals("")) name = null;
         if(email.equals("")) email = null;
-        User user1 = new User(name,email,null);
+        User user1 = new User(name,email, null);
         Api.getClient().updateUser(authToken,user1)
                 .enqueue(new Callback<Message>() {
                     @Override
                     public void onResponse(Call<Message> call, Response<Message> response) {
-                        Message m = response.body();
-                        Toast.makeText(HomeActivity.this, m.getMessage(), Toast.LENGTH_SHORT).show();
+                        if(response.isSuccessful()) {
+                            Message m = response.body();
+                            Toast.makeText(HomeActivity.this, m.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            Message error = Api.parserError(response);
+                                Toast.makeText(HomeActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+
                     }
 
                     @Override
@@ -202,5 +212,19 @@ public class HomeActivity extends AppCompatActivity {
     }
 
 
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        System.out.println(data);
+//        if (requestCode == 1) {
+//            if (resultCode == RESULT_OK) {
+//                authToken = data.getStringExtra("tokenback");
+//                Toast.makeText(this, authToken, Toast.LENGTH_SHORT).show();
+//            }
+//            if (resultCode == RESULT_CANCELED) {
+//                Toast.makeText(this, "Nothing selected", Toast.LENGTH_SHORT).show();
+//            }
+//        }
+//    }
 
 }

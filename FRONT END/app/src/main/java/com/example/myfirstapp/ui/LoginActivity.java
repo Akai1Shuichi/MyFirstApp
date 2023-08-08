@@ -95,9 +95,7 @@ public class LoginActivity extends AppCompatActivity {
                         if(response.isSuccessful()) {
                             Token tk = response.body();
                             Toast.makeText(LoginActivity.this, tk.getMessage(), Toast.LENGTH_SHORT).show();
-
                             getUser("Bearer " + tk.getToken());
-
                         }
                         else  {
                             Message error =  Api.parserError(response);
@@ -125,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onResponse(Call<User> call, Response<User> response) {
                         if(response.isSuccessful()) {
                             User user1 = response.body() ;
-                           // Toast.makeText(LoginActivity.this, response.body().toString(), Toast.LENGTH_SHORT).show();
+                            // Toast.makeText(LoginActivity.this, response.body().toString(), Toast.LENGTH_SHORT).show();
                             // show information
                             Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
                             intent.putExtra("name", user1.getName());

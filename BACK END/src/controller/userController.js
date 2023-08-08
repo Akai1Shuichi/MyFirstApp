@@ -36,7 +36,7 @@ const userController = {
         return;
       }
 
-      // check password
+      // encrypt password
       user.password = await bcrypt.hash(user.password, 8);
 
       // insert
@@ -102,6 +102,21 @@ const userController = {
     }
   },
 
+  checkpass: async (req, res) => {
+    try {
+      const isMatch = await bcrypt.compare(
+        req.body.password,
+        req.user.password
+      );
+      if (!isMatch) {
+        res.status(400).send({ message: 'Current Password is wrong !!!' });
+        return;
+      }
+      res.status(201).send({ message: 'Current Password is correct !!!' });
+    } catch (e) {
+      res.status(500).send({ message: e.message });
+    }
+  },
   get: async (req, res) => {
     try {
       const user = await queryRow(
@@ -119,7 +134,7 @@ const userController = {
 
   update: async (req, res) => {
     const updates = Object.keys(req.body);
-    const allowedUpdates = ['name', 'email'];
+    const allowedUpdates = ['name', 'email', 'password'];
     const isValidOperation = updates.every((update) =>
       allowedUpdates.includes(update)
     );
@@ -131,14 +146,6 @@ const userController = {
 
       // if have password that encrypt password
       if ('password' in req.body) {
-        const isMatch = await bcrypt.compare(
-          req.body.password,
-          req.user.password
-        );
-        if (!isMatch) {
-          res.status(400).send({ message: 'Current Password is wrong !!!' });
-          return;
-        }
         req.body.password = await bcrypt.hash(req.body.password, 8);
       }
 

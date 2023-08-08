@@ -1,8 +1,7 @@
 package com.example.myfirstapp.api.model;
 
 public class User {
-    private String name,email,password ;
-
+   private String name,email,password ;
 
     public User(String name, String email, String password) {
         this.name = name;
