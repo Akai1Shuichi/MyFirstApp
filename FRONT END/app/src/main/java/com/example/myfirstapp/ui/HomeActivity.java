@@ -2,9 +2,10 @@ package com.example.myfirstapp.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,27 +19,40 @@ import com.example.myfirstapp.api.model.User;
 import com.example.myfirstapp.api.service.Api;
 
 import maes.tech.intentanim.CustomIntent;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class HomeActivity extends AppCompatActivity {
 
-    private String authToken ;
+    public static final String SHARED_PREFS = "shared_prefs";
+
+    public static final String NAME_KEY = "name_key" ;
+
+    public static final String EMAIL_KEY = "email_key";
+
+    public static final String AUTH_TOKEN_KEY = "auth_token_key" ;
+
+    private String name,email,authToken , editNametxt , editEmailtxt;
+
+    SharedPreferences sharedPreferences ;
     private TextView txtLogOut, txtNameH,txtEmailH ;
     private EditText editName, editEmail ;
 
     private Button editProfile , editSave ,editCancel ,editPassword;
 
     private ImageView iconEditName,iconEditEmail;
-
-    private String editNametxt , editEmailtxt ,txtnameHt , txtemailHt;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        sharedPreferences = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        name = sharedPreferences.getString(NAME_KEY,null);
+        email = sharedPreferences.getString(EMAIL_KEY, null);
+        authToken = sharedPreferences.getString(AUTH_TOKEN_KEY,null);
+
 
         txtLogOut = findViewById(R.id.txtLogOut);
         txtNameH = findViewById(R.id.txtNameH);
@@ -52,13 +66,8 @@ public class HomeActivity extends AppCompatActivity {
         iconEditName = findViewById(R.id.iconEditName);
         iconEditEmail = findViewById(R.id.iconEditEmail);
 
-
-        txtnameHt = getIntent().getStringExtra("name");
-        txtemailHt = getIntent().getStringExtra("email");
-        authToken = getIntent().getStringExtra("token");
-
-        txtNameH.setText(txtnameHt);
-        txtEmailH.setText(txtemailHt);
+        txtNameH.setText(name);
+        txtEmailH.setText(email);
 
         // editprofile
         editProfile.setOnClickListener(new View.OnClickListener() {
@@ -79,7 +88,7 @@ public class HomeActivity extends AppCompatActivity {
                         iconEditName.setVisibility(view.GONE);
 
                         editName.requestFocus();
-                        editName.setHint(txtnameHt);
+                        editName.setHint(name);
 
                         txtNameH.setText("");
                     }
@@ -91,7 +100,7 @@ public class HomeActivity extends AppCompatActivity {
                         editEmail.setVisibility(view.VISIBLE);
                         iconEditEmail.setVisibility(view.GONE);
 
-                        editEmail.setHint(txtemailHt);
+                        editEmail.setHint(email);
                         editEmail.requestFocus();
 
                         txtEmailH.setText("");
@@ -103,20 +112,20 @@ public class HomeActivity extends AppCompatActivity {
                     public void onClick(View view) {
                         initialClick();
 
-                     if(!(txtNameH.getText().equals(txtnameHt) && txtEmailH.getText().equals(txtemailHt))){
+                     if(!(txtNameH.getText().equals(name) && txtEmailH.getText().equals(email))){
                          editNametxt = editName.getText().toString() ;
                          editEmailtxt =  editEmail.getText().toString();
 
-                         if(editNametxt.equals("") && editEmailtxt.equals("") || editNametxt.equals(txtnameHt) && editEmailtxt.equals(txtemailHt)
-                         || editNametxt.equals(txtnameHt) && editEmailtxt.equals("") || editNametxt.equals("") && editEmailtxt.equals(txtemailHt)) {
-                             txtNameH.setText(txtnameHt);
-                             txtEmailH.setText(txtemailHt);
+                         if(editNametxt.equals("") && editEmailtxt.equals("") || editNametxt.equals(name) && editEmailtxt.equals(email)
+                         || editNametxt.equals(name) && editEmailtxt.equals("") || editNametxt.equals("") && editEmailtxt.equals(email)) {
+                             txtNameH.setText(name);
+                             txtEmailH.setText(email);
                          }
                          else {
-                             txtNameH.setText(editNametxt.equals("") ? txtnameHt : editNametxt);
-                             txtEmailH.setText(editEmailtxt.equals("") ? txtemailHt : editEmailtxt);
-                             txtnameHt = txtNameH.getText().toString() ;
-                             txtemailHt = txtEmailH.getText().toString() ;
+                             txtNameH.setText(editNametxt.equals("") ? name : editNametxt);
+                             txtEmailH.setText(editEmailtxt.equals("") ? email : editEmailtxt);
+                             name = txtNameH.getText().toString() ;
+                             email = txtEmailH.getText().toString() ;
                              updateUser(authToken,editNametxt,editEmailtxt);
                          }
 
@@ -128,23 +137,25 @@ public class HomeActivity extends AppCompatActivity {
                 editCancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        txtNameH.setText(txtnameHt);
-                        txtEmailH.setText(txtemailHt);
+                        txtNameH.setText(name);
+                        txtEmailH.setText(email);
                         initialClick();
                     }
                 });
             }
         });
-
         // editPassword
         editPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(HomeActivity.this,ChangePassword.class);
-                intent.putExtra("authToken",authToken);
-//                startActivityForResult(intent,1);
+                // intent.putExtra("authToken",authToken);
+//                SharedPreferences.Editor editor = sharedPreferences.edit();
+//                editor.putString(AUTH_TOKEN_KEY,null);
+//                editor.apply();
                 startActivity(intent);
                 CustomIntent.customType(HomeActivity.this,"left-to-right");
+                finish();
             }
         });
         // logout
@@ -174,9 +185,14 @@ public class HomeActivity extends AppCompatActivity {
                     public void onResponse(Call<Message> call, Response<Message> response) {
                         Message m = response.body();
                         Toast.makeText(HomeActivity.this, m.getMessage(), Toast.LENGTH_SHORT).show();
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.clear();
+                        editor.apply();
+
                         Intent intent = new Intent(HomeActivity.this,LoginActivity.class);
                         startActivity(intent);
                         CustomIntent.customType(HomeActivity.this, "right-to-left");
+                        finish();
                     }
                     @Override
                     public void onFailure(Call<Message> call, Throwable t) {

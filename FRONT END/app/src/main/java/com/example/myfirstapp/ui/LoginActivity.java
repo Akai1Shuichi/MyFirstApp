@@ -2,7 +2,9 @@ package com.example.myfirstapp.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -24,6 +26,19 @@ import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
+
+    public static final String SHARED_PREFS = "shared_prefs";
+
+    public static final String NAME_KEY = "name_key" ;
+
+    public static final String EMAIL_KEY = "email_key";
+
+    public static final String AUTH_TOKEN_KEY = "auth_token_key" ;
+
+    private String name,email,authToken;
+
+    SharedPreferences sharedPreferences ;
+
     private static final String TAG = "LoginActivity";
     private TextView txtSignUp,txtSignUp2,txtWarnEmailL,txtWarnPassL ;
 
@@ -33,6 +48,12 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        sharedPreferences = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+
+        name = sharedPreferences.getString(NAME_KEY,null);
+        email = sharedPreferences.getString(EMAIL_KEY,null);
+        authToken = sharedPreferences.getString(AUTH_TOKEN_KEY,null);
 
         txtSignUp = findViewById(R.id.txtSignUp);
         txtSignUp2 = findViewById(R.id.txtSignUp2);
@@ -48,6 +69,7 @@ public class LoginActivity extends AppCompatActivity {
                 Intent intent = new Intent(LoginActivity.this,SignUpActivity.class);
                 startActivity(intent);
                 CustomIntent.customType(LoginActivity.this,"left-to-right");
+                finish();
             }
         });
         txtSignUp2.setOnClickListener(new View.OnClickListener() {
@@ -56,6 +78,7 @@ public class LoginActivity extends AppCompatActivity {
                 Intent intent = new Intent(LoginActivity.this,SignUpActivity.class);
                 startActivity(intent);
                CustomIntent.customType(LoginActivity.this,"left-to-right");
+                finish();
             }
         });
 
@@ -81,7 +104,6 @@ public class LoginActivity extends AppCompatActivity {
                 }
                // login
                loginUser(edEmailLt,edPassLt);
-
             }
         });
 
@@ -126,11 +148,21 @@ public class LoginActivity extends AppCompatActivity {
                             // Toast.makeText(LoginActivity.this, response.body().toString(), Toast.LENGTH_SHORT).show();
                             // show information
                             Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
-                            intent.putExtra("name", user1.getName());
-                            intent.putExtra("email", user1.getEmail());
-                            intent.putExtra("token", authToken);
+
+//                            intent.putExtra("name", user1.getName());
+//                            intent.putExtra("email", user1.getEmail());
+//                            intent.startActivity("token", authToken);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                            editor.putString(NAME_KEY,user1.getName());
+                            editor.putString(EMAIL_KEY,user1.getEmail());
+                            editor.putString(AUTH_TOKEN_KEY,authToken);
+
+                            editor.apply();
+
                             startActivity(intent);
-                            CustomIntent.customType(LoginActivity.this, "left-to-right");
+//                          CustomIntent.customType(LoginActivity.this, "left-to-right");
+                            finish();
                         }
                         else {
                             Message error = Api.parserError(response);
@@ -151,5 +183,12 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+         if(authToken != null) {
+           getUser(authToken);
+         }
+    }
 
 }

@@ -3,7 +3,9 @@ package com.example.myfirstapp.ui;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -24,7 +26,12 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ChangePassword extends AppCompatActivity {
+    public static final String SHARED_PREFS = "shared_prefs";
+
+    public static final String AUTH_TOKEN_KEY = "auth_token_key" ;
     private String authToken ;
+
+    SharedPreferences sharedPreferences ;
     private TextView txt2P,txt3P,txtWarnP ;
     private EditText edt1P,edt2P,edt3P ;
 
@@ -35,6 +42,10 @@ public class ChangePassword extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_password);
+
+        sharedPreferences = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        authToken = sharedPreferences.getString(AUTH_TOKEN_KEY,null);
+
         View password1 = findViewById(R.id.password1);
         View password2 = findViewById(R.id.password2);
         View password3 = findViewById(R.id.password3);
@@ -56,7 +67,7 @@ public class ChangePassword extends AppCompatActivity {
         intialClick(edt2P);
         intialClick(edt3P);
 
-        authToken = getIntent().getStringExtra("authToken");
+
 
         // warn
         btnP.setOnClickListener(new View.OnClickListener() {
@@ -85,11 +96,13 @@ public class ChangePassword extends AppCompatActivity {
         btnbackP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent resultIntent = new Intent();
+                Intent resultIntent = new Intent(ChangePassword.this,HomeActivity.class);
+                startActivity(resultIntent);
+                CustomIntent.customType(ChangePassword.this, "right-to-left");
+                finish();
 //                resultIntent.putExtra("tokenback", authToken );
 //                setResult(RESULT_OK, resultIntent);
-//                CustomIntent.customType(ChangePassword.this, "right-to-left");
-                finish();
+
 
             }
         });

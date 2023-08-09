@@ -19,7 +19,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("/user")
-    Call<Token> createUser(@Field("name") String name,
+    Call<Message> createUser(@Field("name") String name,
                            @Field("email") String email,
                            @Field("password") String password) ;
 

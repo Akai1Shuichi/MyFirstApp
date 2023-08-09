@@ -50,6 +50,7 @@ public class SignUpActivity extends AppCompatActivity {
                 Intent intent = new Intent(SignUpActivity.this,LoginActivity.class);
                 startActivity(intent);
                 CustomIntent.customType(SignUpActivity.this,"right-to-left");
+                finish();
             }
         });
 
@@ -59,6 +60,7 @@ public class SignUpActivity extends AppCompatActivity {
                 Intent intent = new Intent(SignUpActivity.this,LoginActivity.class);
                 startActivity(intent);
                CustomIntent.customType(SignUpActivity.this,"right-to-left");
+                finish();
             }
         });
 
@@ -109,12 +111,17 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void createUser(String edNameSt,String edEmailSt,String edPassSt) {
         Api.getClient().createUser(edNameSt,edEmailSt,edPassSt)
-                .enqueue(new Callback<Token>() {
+                .enqueue(new Callback<Message>() {
                     @Override
-                    public void onResponse(Call<Token> call, Response<Token> response) {
+                    public void onResponse(Call<Message> call, Response<Message> response) {
                         if(response.isSuccessful()) {
-                            Token tk = response.body();
-                            Toast.makeText(SignUpActivity.this, tk.getMessage().toString(), Toast.LENGTH_SHORT).show();
+                            Message m = response.body();
+                            Toast.makeText(SignUpActivity.this, m.getMessage(), Toast.LENGTH_SHORT).show();
+
+                            Intent intent = new Intent(SignUpActivity.this,LoginActivity.class);
+                            startActivity(intent);
+                            CustomIntent.customType(SignUpActivity.this,"right-to-left");
+                            finish();
                         }
                         else  {
                             Message error =  Api.parserError(response);
@@ -129,7 +136,7 @@ public class SignUpActivity extends AppCompatActivity {
                         }
                     }
                     @Override
-                    public void onFailure(Call<Token> call, Throwable t) {
+                    public void onFailure(Call<Message> call, Throwable t) {
 
                         Toast.makeText(SignUpActivity.this, "On Failure", Toast.LENGTH_SHORT).show();
                     }
