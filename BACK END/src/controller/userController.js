@@ -6,7 +6,9 @@ require('dotenv').config({ path: 'config/.env' });
 
 // tao token
 const generateAuthToken = async function (user) {
-  const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
+  const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+    expiresIn: '1d',
+  });
   return token;
 };
 

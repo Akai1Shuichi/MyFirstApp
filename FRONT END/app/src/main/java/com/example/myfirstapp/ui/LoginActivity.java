@@ -171,7 +171,7 @@ public class LoginActivity extends AppCompatActivity {
                                 txtWarnPassL.setVisibility(View.VISIBLE);
                             }
                             else {
-                                Toast.makeText(LoginActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(LoginActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
