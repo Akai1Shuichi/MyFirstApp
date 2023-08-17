@@ -2,7 +2,6 @@ const queryRow = require('../db/db');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const validator = require('validator');
-require('dotenv').config({ path: 'config/.env' });
 
 // tao token
 const generateAuthToken = async function (user) {
@@ -164,20 +163,6 @@ const userController = {
       const sql = 'DELETE FROM user WHERE id = ?';
       await queryRow(sql, [req.params.id]);
       res.status(201).send({ message: 'Delete Successfully!!!' });
-    } catch (e) {
-      res.status(400).send({ message: e.message });
-    }
-  },
-
-  getDetails: async (req, res) => {
-    try {
-      const sql = 'SELECT * FROM user';
-      const user = await queryRow(sql);
-
-      // res.status(201).send(user);
-      res
-        .status(201)
-        .send({ message: 'Insert successfully !!!!', token: 'tokenfake' });
     } catch (e) {
       res.status(400).send({ message: e.message });
     }

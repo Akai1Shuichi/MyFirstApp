@@ -1,8 +1,8 @@
 const express = require('express');
 const router = new express.Router();
-const userController = require('../controller/userController');
-const auth = require('../middleware/auth');
 
+const auth = require('../middleware/auth');
+const userController = require('../controller/userController');
 // Create user
 router.post('/user', userController.insert);
 
@@ -23,8 +23,5 @@ router.patch('/user/you', auth, userController.update);
 
 // Delete user
 router.delete('/user/you', auth, userController.delete);
-
-// Get All User
-router.get('/allUser', auth, userController.getDetails);
 
 module.exports = router;
